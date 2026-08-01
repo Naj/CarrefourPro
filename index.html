@@ -134,8 +134,9 @@ body.light .card::before{background:linear-gradient(to bottom,rgba(255,255,255,.
 .fav{width:16px;height:16px;border-radius:4px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);}
 .note-card{font-size:12.5px;color:var(--text2);line-height:1.7;}
 .note-card b{color:var(--text);}
-.ledit{opacity:0;font-size:10px;cursor:pointer;padding:2px 5px;border-radius:4px;transition:all .15s;flex-shrink:0;background:rgba(255,121,0,.15);color:var(--orange);}
-.links a:hover .ledit{opacity:1;}
+.ledit-btn{opacity:0;font-size:11px;cursor:pointer;padding:3px 6px;border-radius:4px;transition:all .15s;flex-shrink:0;background:rgba(255,121,0,.15);color:var(--orange);border:none;line-height:1;margin-left:2px;}
+.links li:hover .ledit-btn{opacity:1;}
+.links li{display:flex;align-items:center;}
 .drag-handle{font-size:12px;color:var(--text2);opacity:0;cursor:grab;flex-shrink:0;user-select:none;transition:opacity .15s;}
 .links a:hover .drag-handle{opacity:.5;}
 .lcount{font-size:10px;font-weight:700;color:rgba(255,255,255,.6);background:rgba(255,255,255,.08);border-radius:10px;padding:1px 7px;margin-left:4px;}
@@ -412,7 +413,7 @@ function renderAll(){
     const all=g.links||[];
     const shown=q&&!g.name.toLowerCase().includes(q)?all.filter(l=>l.label.toLowerCase().includes(q)):all;
     if(q&&shown.length===0)return;
-    const lh=shown.map(l=>{const ri=all.indexOf(l);return`<li draggable="true" data-lgid="${g.id}" data-li="${ri}" ondragstart="onLDS(event,${g.id},${ri})" ondragend="onLDE()" ondragover="onLDO(event,${g.id},${ri})" ondrop="onLDrop(event,${g.id},${ri})"><a href="${l.url||'#'}" target="_blank" rel="noopener"><span class="drag-handle">⠿</span>${fav(l.url)}<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.label}</span><span class="ledit" onclick="event.preventDefault();openEditLink(${g.id},${ri})">✏️</span></a></li>`;}).join('');
+    const lh=shown.map(l=>{const ri=all.indexOf(l);const href=l.url&&l.url!=='#'?l.url:'javascript:void(0)';return`<li draggable="true" data-lgid="${g.id}" data-li="${ri}" ondragstart="onLDS(event,${g.id},${ri})" ondragend="onLDE()" ondragover="onLDO(event,${g.id},${ri})" ondrop="onLDrop(event,${g.id},${ri})"><a href="${href}" target="_blank" rel="noopener"><span class="drag-handle">⠿</span>${fav(l.url)}<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.label}</span></a><button class="ledit-btn" onclick="openEditLink(${g.id},${ri})" title="Modifier">✏️</button></li>`;}).join('');
     div.innerHTML=`<div class="accentbar" style="background:${ag}"></div><div class="card-inner"><div class="card-hd"><div class="card-title"><div class="cdot" style="background:${g.color};color:${g.color}"></div>${g.name}<span class="lcount">${all.length}</span></div>${menuBtn(g.id,false)}</div><ul class="links">${lh}</ul></div>`;
     main.appendChild(div);
   });
